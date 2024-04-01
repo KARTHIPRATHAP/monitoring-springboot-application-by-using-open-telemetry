@@ -5,30 +5,43 @@ services:
     build:
       context: ./ms-one
       dockerfile: Dockerfile
+    networks:
+      - spring
     environment:
       - OTEL_SERVICE_NAME=ms-one
       - OTEL_METRICS_EXPORTER=none
       - OTEL_TRACES_EXPORTER=jaeger
       - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
     ports:
-      - "8080:8080"
+      - "8081:8081"
 
   ms-two:
     container_name: ms-two
     build:
       context: ./ms-two
       dockerfile: Dockerfile
+    
     environment:
       - OTEL_SERVICE_NAME=ms-two
       - OTEL_METRICS_EXPORTER=none
       - OTEL_TRACES_EXPORTER=jaeger
       - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+  
+    networks:
+      - spring
     ports:
-      - "8081:8081"
+      - "8082:8082"
 
   jaeger:
     container_name: jaeger
     image: jaegertracing/all-in-one:latest
+    networks:
+      - spring
     ports:
       - "16686:16686"
       - "14250:14250"
+  
+
+networks:
+  spring:
+   driver: bridge

@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-/*
- *  @author: DevProblems(Sarang Kumar A Tak)
- *  Youtube channel: https://youtube.com/@devproblems
- */
+
 @RestController
 @RequestMapping("/customer")
 public class MsOneController {
@@ -22,13 +19,18 @@ public class MsOneController {
         this.customerRepository = customerRepository;
     }
 
-    @PostMapping
+    @PostMapping(path = "/save")
     public ResponseEntity<Customer> post(@RequestBody Customer customer) {
         return ResponseEntity.ok(customerRepository.save(customer));
     }
+    @GetMapping(path = "/all")
+    public ResponseEntity<Object> post() {
+        return ResponseEntity.ok(customerRepository.findAll());
+    }
+    
 
-    @GetMapping
+    @GetMapping(path = "/rest")
     public ResponseEntity<String> get() {
-        return restTemplate.getForEntity("http://ms-two:8081/", String.class);
+        return restTemplate.getForEntity("http://localhost:8082/get", String.class);
     }
 }
